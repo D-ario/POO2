@@ -4,8 +4,8 @@ public class RandomNameItem : MonoBehaviour
 {
     string[] NameOffensif = new string[] { "Sagaie", "Arc", "Sarbacane", "Lance", "Fusil", "Matraque ", "Nuke" };
     string[] NameDefensif = new string[] { "Casque", "Gorgerin", "Cuirasse", "Braconnière", "Tassets", "Haubert", "Brigandine", "Surcot",};
-    string[] NameBonus = new string[] { "Vitesse", "Force", };
-    string[] NameMalus = new string[] { "Attack", "Defence", };
+    string[] NameBonus = new string[] { "Potion", "Gemme", "bénédiction", };
+    string[] NameMalus = new string[] { "Potion", "Malédiction", "Gemme", };
 
     public string GetRandomCatO()
     {

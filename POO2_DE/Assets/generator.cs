@@ -4,12 +4,11 @@ using UnityEngine;
 
 public class generator : MonoBehaviour
 {
-
     class Equipement
     {
         public string categorie;
 
-        public void AfficherInfos()
+        public virtual void AfficherInfos()
         {
             Debug.Log(" Equipement : Catégorie = " + categorie);
         }
@@ -19,13 +18,25 @@ public class generator : MonoBehaviour
     {
         public string nom;
         public int attack;
-        public int defense;
+        public int defence;
+        private int durability;
 
-        public void AfficherInfos()
+        public int Durability
         {
-            Debug.Log(" Equipement : Nom = " + nom);
-            Debug.Log(" Equipement : Attack = " + attack);
-            Debug.Log(" Equipement : Defense = " + defense);
+            get
+            {
+                return durability;
+            }
+
+            set
+            {
+                durability = value;
+            }
+        }
+
+        public override void AfficherInfos()
+        {
+            Debug.Log(" Equipement : Catégorie = " + categorie + "; " + "Nom = " + nom + "; " + "Attack = " + attack + "; " + "Defense = " + defence + "; " + "Durability = " + durability) ;
         }
     }
 
@@ -33,116 +44,128 @@ public class generator : MonoBehaviour
     {
         public string nom;
         public int attack;
-        public int defense;
+        public int defence;
+        private int durability;
 
-        public void AfficherInfos()
+        public int Durability
         {
-            Debug.Log(" Equipement : Nom = " + nom);
-            Debug.Log(" Equipement : Attack = " + attack);
-            Debug.Log(" Equipement : Defense = " + defense);
+            get
+            {
+                return durability;
+            }
+
+            set
+            {
+                durability = value;
+            }
+        }
+        public override void AfficherInfos()
+        {
+            Debug.Log(" Equipement : Catégorie = " + categorie + "; " + "Nom = " + nom + "; " + "Attack = " + attack + "; " + "Defense = " + defence + "; " + "Durability = " + durability);
         }
     }
 
     class Ressources
     {
-        public string categorie;
+        protected string _categorie;
 
-        public void AfficherInfos()
+        public Ressources(string categorie)
         {
-            Debug.Log(" Ressources : Catégorie = " + categorie);
+            _categorie = categorie;
         }
     }
 
     class Bonus : Ressources
     {
-        public string nom;
-        public int attack;
-        public int defense;
+        public string _nom;
+        public int _attack;
+        public int _defence;
 
-        public void AfficherInfos()
+        public Bonus(string categorie, string nom, int attack, int defence) : base(categorie)
         {
-            Debug.Log(" Ressources : Nom = " + nom);
-            Debug.Log(" Ressources : Attack = " + attack);
-            Debug.Log(" Ressources : Defense = " + defense);
+            _nom = nom;
+            _attack = attack;
+            _defence = defence;
+            Debug.Log(" Ressources : Catégorie = " + categorie + "; " + "Nom = " + nom + "; " + "Attack = " + attack + "; " + "Defence = " + defence);
         }
     }
 
     class Malus : Ressources
     {
-        public string nom;
-        public int attack;
-        public int defense;
+        public string _nom;
+        public int _attack;
+        public int _defence;
 
-        public void AfficherInfos()
+        public Malus(string categorie, string nom, int attack, int defence) : base(categorie)
         {
-            Debug.Log(" Ressources : Nom = " + nom);
-            Debug.Log(" Ressources : Attack = " + attack);
-            Debug.Log(" Ressources : Defense = " + defense);
+            _nom = nom;
+            _attack = attack;
+            _defence = defence;
+            Debug.Log(" Ressources : Catégorie = " + categorie + "; " + "Nom = " + nom + "; " + "Attack = " + attack + "; " + "Defence = " + defence);
         }
     }
 
-
+    //Generate stat
     public void generateEquip()
     {
+        //setup class
         Equipement equipement = new Equipement();
         Offensifs offensifs = new Offensifs();
         Défensifs défensifs = new Défensifs();
 
-        var GeneratorCat = GetComponent<RandomCategoryItem>();
-        string categorieEquipe = GeneratorCat.GetRandomCatE();
-
-        var GeneratorName = GetComponent<RandomNameItem>();
-        string NameOff = GeneratorName.GetRandomCatO();
-        string NameDef = GeneratorName.GetRandomCatD();
-
-        equipement.categorie = categorieEquipe;
-        equipement.AfficherInfos();
-
-        if (categorieEquipe == "Offensif")
+        for(int i = 0; i<3;  i++)
         {
-            offensifs.nom = NameOff;
-            offensifs.attack = Random.Range(0, 25);
-            offensifs.defense = Random.Range(0, 10);
-            offensifs.AfficherInfos();
-        }
-        if(categorieEquipe == "Defensif")
-        {
-            défensifs.nom = NameDef;
-            défensifs.attack = Random.Range(0, 25);
-            défensifs.defense = Random.Range(0, 10);
-            défensifs.AfficherInfos();
+            //setup cat
+            var GeneratorCat = GetComponent<RandomCategoryItem>();
+            string categorieEquipe = GeneratorCat.GetRandomCatE();
+
+            //setup name
+            var GeneratorName = GetComponent<RandomNameItem>();
+            string NameOff = GeneratorName.GetRandomCatO();
+            string NameDef = GeneratorName.GetRandomCatD();
+
+            if (categorieEquipe == "Offensif")
+            {
+                offensifs.categorie = categorieEquipe;
+                offensifs.nom = NameOff;
+                offensifs.attack = Random.Range(0, 25);
+                offensifs.defence = Random.Range(0, 10);
+                offensifs.Durability = Random.Range(1, 100);
+                offensifs.AfficherInfos();
+            }
+            if (categorieEquipe == "Defensif")
+            {
+                défensifs.categorie = categorieEquipe;
+                défensifs.nom = NameDef;
+                défensifs.attack = Random.Range(0, 25);
+                défensifs.defence = Random.Range(0, 10);
+                défensifs.Durability = Random.Range(1, 100);
+                défensifs.AfficherInfos();
+            }
         }
     }
 
     public void generateRessource()
     {
-        Ressources ressources = new Ressources();
-        Bonus bonus = new Bonus();
-        Malus malus = new Malus();
-
-        var GenratorCat = GetComponent<RandomCategoryItem>();
-        string categorieRessources = GenratorCat.GetRandomCatR();
-
-        var GeneratorName = GetComponent<RandomNameItem>();
-        string NameBo = GeneratorName.GetRandomCatB();
-        string NameMa = GeneratorName.GetRandomCatM();
-
-        ressources.categorie = categorieRessources;
-        ressources.AfficherInfos();
-
-        if(categorieRessources == "Bonus")
+        for (int i = 0; i < 3; i++)
         {
-            bonus.nom = NameBo;
-            bonus.attack = Random.Range(0, 25);
-            bonus.defense = Random.Range(0, 10);
-            bonus.AfficherInfos();
-        }
-        if(categorieRessources == "Malus")
-        {
-            malus.nom = NameMa;
-            malus.attack = Random.Range(-25, -1);
-            malus.defense = Random.Range(-10, -1);
-            malus.AfficherInfos();
+            //setup cat
+            var GenratorCat = GetComponent<RandomCategoryItem>();
+            string categorieRessources = GenratorCat.GetRandomCatR();
+
+            //setup name
+            var GeneratorName = GetComponent<RandomNameItem>();
+            string NameBo = GeneratorName.GetRandomCatB();
+            string NameMa = GeneratorName.GetRandomCatM();
+
+            if (categorieRessources == "Bonus")
+            {
+                Bonus bonus = new Bonus(categorieRessources, NameBo, Random.Range(0, 25), Random.Range(0, 10));
+            }
+            if (categorieRessources == "Malus")
+            {
+                Malus malus = new Malus(categorieRessources, NameMa, Random.Range(-25, -1), Random.Range(-10, -1));
+            }
         }
     }
 }
