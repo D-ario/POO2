@@ -4,117 +4,17 @@ using UnityEngine;
 
 public class generator : MonoBehaviour
 {
-    class Equipement
-    {
-        public string categorie;
-
-        public virtual void AfficherInfos()
-        {
-            Debug.Log(" Equipement : Catégorie = " + categorie);
-        }
-    }
-
-    class Offensifs : Equipement
-    {
-        public string nom;
-        public int attack;
-        public int defence;
-        private int durability;
-
-        public int Durability
-        {
-            get
-            {
-                return durability;
-            }
-
-            set
-            {
-                durability = value;
-            }
-        }
-
-        public override void AfficherInfos()
-        {
-            Debug.Log(" Equipement : Catégorie = " + categorie + "; " + "Nom = " + nom + "; " + "Attack = " + attack + "; " + "Defense = " + defence + "; " + "Durability = " + durability) ;
-        }
-    }
-
-    class Défensifs : Equipement
-    {
-        public string nom;
-        public int attack;
-        public int defence;
-        private int durability;
-
-        public int Durability
-        {
-            get
-            {
-                return durability;
-            }
-
-            set
-            {
-                durability = value;
-            }
-        }
-        public override void AfficherInfos()
-        {
-            Debug.Log(" Equipement : Catégorie = " + categorie + "; " + "Nom = " + nom + "; " + "Attack = " + attack + "; " + "Defense = " + defence + "; " + "Durability = " + durability);
-        }
-    }
-
-    class Ressources
-    {
-        protected string _categorie;
-
-        public Ressources(string categorie)
-        {
-            _categorie = categorie;
-        }
-    }
-
-    class Bonus : Ressources
-    {
-        public string _nom;
-        public int _attack;
-        public int _defence;
-
-        public Bonus(string categorie, string nom, int attack, int defence) : base(categorie)
-        {
-            _nom = nom;
-            _attack = attack;
-            _defence = defence;
-            Debug.Log(" Ressources : Catégorie = " + categorie + "; " + "Nom = " + nom + "; " + "Attack = " + attack + "; " + "Defence = " + defence);
-        }
-    }
-
-    class Malus : Ressources
-    {
-        public string _nom;
-        public int _attack;
-        public int _defence;
-
-        public Malus(string categorie, string nom, int attack, int defence) : base(categorie)
-        {
-            _nom = nom;
-            _attack = attack;
-            _defence = defence;
-            Debug.Log(" Ressources : Catégorie = " + categorie + "; " + "Nom = " + nom + "; " + "Attack = " + attack + "; " + "Defence = " + defence);
-        }
-    }
 
     //Generate stat
     public void generateEquip()
     {
-        //setup class
-        Equipement equipement = new Equipement();
-        Offensifs offensifs = new Offensifs();
-        Défensifs défensifs = new Défensifs();
 
         for(int i = 0; i<3;  i++)
         {
+            //setup class
+            Offensifs offensifs = new Offensifs();
+            Defensifs defensifs = new Defensifs();
+
             //setup cat
             var GeneratorCat = GetComponent<RandomCategoryItem>();
             string categorieEquipe = GeneratorCat.GetRandomCatE();
@@ -124,6 +24,8 @@ public class generator : MonoBehaviour
             string NameOff = GeneratorName.GetRandomCatO();
             string NameDef = GeneratorName.GetRandomCatD();
 
+
+
             if (categorieEquipe == "Offensif")
             {
                 offensifs.categorie = categorieEquipe;
@@ -131,16 +33,20 @@ public class generator : MonoBehaviour
                 offensifs.attack = Random.Range(0, 25);
                 offensifs.defence = Random.Range(0, 10);
                 offensifs.Durability = Random.Range(1, 100);
-                offensifs.AfficherInfos();
+                //offensifs.AfficherInfos();
+
+                Inventaire.Instance.IT.Add(offensifs);
             }
             if (categorieEquipe == "Defensif")
             {
-                défensifs.categorie = categorieEquipe;
-                défensifs.nom = NameDef;
-                défensifs.attack = Random.Range(0, 25);
-                défensifs.defence = Random.Range(0, 10);
-                défensifs.Durability = Random.Range(1, 100);
-                défensifs.AfficherInfos();
+                defensifs.categorie = categorieEquipe;
+                defensifs.nom = NameDef;
+                defensifs.attack = Random.Range(0, 25);
+                defensifs.defence = Random.Range(0, 10);
+                defensifs.Durability = Random.Range(1, 100);
+                //defensifs.AfficherInfos();
+
+                Inventaire.Instance.IT.Add(defensifs);
             }
         }
     }
@@ -161,11 +67,18 @@ public class generator : MonoBehaviour
             if (categorieRessources == "Bonus")
             {
                 Bonus bonus = new Bonus(categorieRessources, NameBo, Random.Range(0, 25), Random.Range(0, 10));
+                Inventaire.Instance.IT.Add(bonus);
             }
             if (categorieRessources == "Malus")
             {
                 Malus malus = new Malus(categorieRessources, NameMa, Random.Range(-25, -1), Random.Range(-10, -1));
+                Inventaire.Instance.IT.Add(malus);
             }
         }
+    }
+
+    public void show()
+    {
+        Inventaire.Instance.ShowStat();
     }
 }
